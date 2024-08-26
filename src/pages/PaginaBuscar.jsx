@@ -1,4 +1,5 @@
-import MovieCard from '../components/FilmCard'
+import React from 'react'
+import MovieCard from '../components/MovieCard'
 
 const movieData = {
   name: "Avengers: Infinity War",
