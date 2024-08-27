@@ -2,9 +2,12 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Flex, Box, Link } from '@chakra-ui/react';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { AuthContext } from '../utils/AuthContext';
 
-const NavBar = ({ isLoggedIn }) => {
+const NavBar = () => {
+  const { isLoggedIn, logout } = useContext(AuthContext);
   return (
     <Flex
       as="nav"
@@ -40,6 +43,7 @@ const NavBar = ({ isLoggedIn }) => {
             >
               Favoritos
             </Link>
+            <button onClick={logout}>Logout</button>
           </>
         ) : (
           <>

@@ -6,26 +6,34 @@ import Login from "./pages/PaginaLogin";
 import Signup from "./pages/PaginaSignup";
 import Buscar from "./pages/PaginaBuscar";
 import NavBar from "./components/NavBar";
+import { AuthProvider, AuthContext } from './utils/AuthContext';
+import { useContext } from 'react';
 
 
 const AppRoutes = () => {
-
-  const isLoggedIn = false;
-  return(
-  <BrowserRouter>
-  <ChakraProvider>
-          <NavBar isLoggedIn={isLoggedIn} />
+  return (
+    <BrowserRouter>
+      <ChakraProvider>
+        <AuthProvider>
+          <AuthConsumer>
+            {({ isLoggedIn }) => <NavBar isLoggedIn={isLoggedIn} />}
+          </AuthConsumer>
           <Box pt="60px" bg="#1F1F1E" minH="100vh">
-          <Routes>
-            <Route path="/" element={<Buscar />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-
-          </Routes> 
+            <Routes>
+              <Route path="/" element={<Buscar />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+            </Routes>
           </Box>
-  </ChakraProvider>
-  </BrowserRouter>
-)
+        </AuthProvider>
+      </ChakraProvider>
+    </BrowserRouter>
+  );
+};
+
+const AuthConsumer = ({ children }) => {
+  const { isLoggedIn } = useContext(AuthContext);
+  return children({ isLoggedIn });
 };
 
 export default AppRoutes;

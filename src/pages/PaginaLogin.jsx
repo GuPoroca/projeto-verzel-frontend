@@ -17,23 +17,31 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { login as loginSchema } from '../utils/ZodSchemas';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../utils/AuthContext';
 
 export default function Login() {
-    const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm({
-      resolver: zodResolver(loginSchema),
-    });
-  
-    const onSubmit = async (data) => {
-      try {
-        const response = await axios.post("http://localhost:8000/api/auth", data);
-        // Armazenar o token e redirecionar o usuário
-        console.log(response.data.token);
-      } catch (error) {
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors }, setError } = useForm({
+    resolver: zodResolver(loginSchema),
+  });
+  const { login } = useAuth();
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:8000/api/auth", data);
+      const token = response.data.token;
+      console.log("Token:", token);
+      // Chama o método login do contexto
+      login(token);
+      navigate('/'); // ou qualquer página de destino
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("email", { type: "manual", message: "Login error" });
+      } else {
         console.error("Error during login:", error);
       }
-    };
-  
+    }
+  };
 
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"#1F1F1E"}>
@@ -50,14 +58,15 @@ export default function Login() {
           p={8}>
           <Stack spacing={4}>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl id="email" isRequired>
+              <FormControl id="email" isInvalid={errors.email} isRequired>
                 <FormLabel color="white">Email address</FormLabel>
-                <Input type="email" {...register("email")}  color="white"/>
+                <Input type="email" {...register("email")} color="white" />
                 {errors.email && <Text color="red.500">{errors.email.message}</Text>}
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel color="white">Password</FormLabel>
-                <Input type="password" {...register("password")}  color="white"/>
+                <Input type="password" {...register("password")} color="white" />
+                {errors.password && <Text color="red.500">{errors.password.message}</Text>}
               </FormControl>
               <Stack spacing={10}>
                 <Text align={'center'} color={'white'}>

@@ -14,14 +14,16 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signup as signupSchema } from '../utils/ZodSchemas';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signup as signupSchema } from "../utils/ZodSchemas";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(signupSchema),
   });
@@ -29,7 +31,8 @@ export default function Signup() {
   const onSubmit = async (data) => {
     try {
       await axios.post("http://localhost:8000/api/user", data);
-      // Redirecionar ou mostrar mensagem de sucesso
+      // Exibir mensagem de sucesso ou redirecionar
+      navigate("/login");
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -43,58 +46,69 @@ export default function Signup() {
             Sign up
           </Heading>
         </Stack>
-        <Box
-          rounded={'lg'}
-          bg={'#252526'}
-          boxShadow={'lg'}
-          p={8}>
+        <Box rounded={"lg"} bg={"#252526"} boxShadow={"lg"} p={8}>
           <Stack spacing={4}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <HStack>
                 <Box>
-                  <FormControl id="username" isRequired>
-                    <FormLabel color="white">Username</FormLabel>
-                    <Input type="text" {...register("username")} color="white"/>
-                    {errors.username && <Text color="red.500">{errors.username.message}</Text>}
+                  <FormControl id="name" isRequired>
+                    <FormLabel color="white">Name</FormLabel>
+                    <Input type="text" {...register("username")} color="white" />
+                    {errors.name && (
+                      <Text color="red.500">{errors.name.message}</Text>
+                    )}
                   </FormControl>
                 </Box>
               </HStack>
               <FormControl id="email" isRequired>
                 <FormLabel color="white">Email</FormLabel>
-                <Input type="email" {...register("email")} color="white"/>
-                {errors.email && <Text color="red.500">{errors.email.message}</Text>}
+                <Input type="email" {...register("email")} color="white" />
+                {errors.email && (
+                  <Text color="red.500">{errors.email.message}</Text>
+                )}
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel color="white">Password</FormLabel>
                 <InputGroup>
-                  <Input type={showPassword ? 'text' : 'password'} {...register("password")} color="white"/>
-                  <InputRightElement h={'full'}>
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    {...register("password")}
+                    color="white"
+                  />
+                  <InputRightElement h={"full"}>
                     <Button
-                      variant={'ghost'}
-                      onClick={() => setShowPassword(!showPassword)}>
+                      variant={"ghost"}
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
                       {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                {errors.password && <Text color="red.500">{errors.password.message}</Text>}
+                {errors.password && (
+                  <Text color="red.500">{errors.password.message}</Text>
+                )}
               </FormControl>
               <Stack spacing={10} pt={2}>
                 <Button
                   loadingText="Submitting"
                   size="lg"
-                  bg={'red.600'}
-                  color={'white'}
+                  bg={"red.600"}
+                  color={"white"}
                   _hover={{
-                    bg: 'red.700',
+                    bg: "red.700",
                   }}
-                  type="submit">
+                  type="submit"
+                >
                   Sign up
                 </Button>
               </Stack>
             </form>
             <Stack pt={6}>
-              <Text align={'center'} color={'white'}>
-                Already a user? <Link color={'red.400'} href="/login">Login</Link>
+              <Text align={"center"} color={"white"}>
+                Already a user?{" "}
+                <Link color={"red.400"} href="/login">
+                  Login
+                </Link>
               </Text>
             </Stack>
           </Stack>
