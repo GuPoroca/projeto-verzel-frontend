@@ -12,6 +12,7 @@
 ## Get Started
 
 LINK PARA <a href="https://youtu.be/ATgcJQ5G32c" target="_blank"> VIDEO </a> APRESENTAÇÃO
+
 Para rodar, primeiro, crie um .env com o link do backend, no meu caso http://localhost:8000,
 no .env.example o exemplo e o formato dele.
 abra o terminal na pasta do projeto e,
