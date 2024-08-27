@@ -4,10 +4,25 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Flex, Box, Link } from '@chakra-ui/react';
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
+import {jwtDecode} from "jwt-decode";
 import { AuthContext } from '../utils/AuthContext';
 
 const NavBar = () => {
   const { isLoggedIn, logout } = useContext(AuthContext);
+
+  const token = localStorage.getItem('token');
+  let favoritesLink = '/favorites'; // Default link if no token
+
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      const userHash = decodedToken.hash;
+      favoritesLink = `/favorites/${userHash}`;
+    } catch (error) {
+      console.error('Erro ao decodificar o token:', error);
+    }
+  }
+
   return (
     <Flex
       as="nav"
@@ -36,7 +51,7 @@ const NavBar = () => {
             </Link>
             <Link
               as={RouterLink}
-              to="/favorites"
+              to= {favoritesLink}
               p={2}
               color="white"
               _hover={{ textDecoration: 'none', bg: 'red.700' }}
