@@ -8,18 +8,22 @@ import Buscar from "./pages/PaginaBuscar";
 import NavBar from "./components/NavBar";
 
 
-const AppRoutes = () => (
+const AppRoutes = () => {
+
+  const isLoggedIn = true;
+  return(
   <BrowserRouter>
   <ChakraProvider>
-          <NavBar />
+          <NavBar isLoggedIn={isLoggedIn} />
           <Box pt="60px" bg="#1F1F1E" minH="100vh">
           <Routes>
             <Route path="/" element={<Buscar />} />
 
-          </Routes>
+          </Routes> 
           </Box>
   </ChakraProvider>
   </BrowserRouter>
-);
+)
+};
 
 export default AppRoutes;

@@ -1,23 +1,18 @@
 import React from 'react'
-import MovieCard from '../components/MovieCard'
+import SearchBar from '../components/SearchBar'
 
-const movieData = {
-  name: "Avengers: Infinity War",
-  rating: 8.246,
-  image: "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-  id: 299536
-}
+const PaginaBuscar = () => {
+  const handleSearch = (query) => {
+    // Aqui você pode adicionar a lógica para buscar filmes com base na consulta
+    console.log('Buscando filmes com a consulta:', query)
+  }
 
-function App() {
   return (
     <div>
-      <MovieCard 
-        name={movieData.name}
-        rating={movieData.rating}
-        image={movieData.image}
-      />
+      <SearchBar onSearch={handleSearch} />
+      {/* Aqui você pode renderizar a lista de filmes ou outros componentes */}
     </div>
   )
 }
 
-export default App
+export default PaginaBuscar
