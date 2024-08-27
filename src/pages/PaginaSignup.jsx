@@ -1,76 +1,82 @@
 import {
-    Flex,
-    Box,
-    FormControl,
-    FormLabel,
-    Input,
-    InputGroup,
-    HStack,
-    InputRightElement,
-    Stack,
-    Button,
-    Heading,
-    Text,
-    Link,
-  } from '@chakra-ui/react'
-  import { useState } from 'react'
-  import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-  import { useNavigate } from 'react-router-dom' // Importando useNavigate
-  
-  export default function Signup() {
-    const [showPassword, setShowPassword] = useState(false)
-    const navigate = useNavigate(); // Inicializando useNavigate
-  
-    return (
-      <Flex
-        minH={'100vh'}
-        align={'center'}
-        justify={'center'}
-        bg={'#1F1F1E'}>
-        <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-          <Stack align={'center'}>
-            <Heading fontSize={'4xl'} textAlign={'center'} color={'white'}>
-              Sign up
-            </Heading>
-            <Text fontSize={'lg'} color={'gray.400'}>
-              to enjoy all of our cool features ✌️
-            </Text>
-          </Stack>
-          <Box
-            rounded={'lg'}
-            bg={'#252526'}
-            boxShadow={'lg'}
-            p={8}>
-            <Stack spacing={4}>
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  HStack,
+  InputRightElement,
+  Stack,
+  Button,
+  Heading,
+  Text,
+  Link,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signup as signupSchema } from '../utils/ZodSchemas';
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import axios from "axios";
+
+export default function Signup() {
+  const [showPassword, setShowPassword] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(signupSchema),
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      await axios.post("http://localhost:8000/api/user", data);
+      // Redirecionar ou mostrar mensagem de sucesso
+    } catch (error) {
+      console.error("Error during signup:", error);
+    }
+  };
+
+  return (
+    <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"#1F1F1E"}>
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"} textAlign={"center"} color={"white"}>
+            Sign up
+          </Heading>
+        </Stack>
+        <Box
+          rounded={'lg'}
+          bg={'#252526'}
+          boxShadow={'lg'}
+          p={8}>
+          <Stack spacing={4}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <HStack>
                 <Box>
                   <FormControl id="username" isRequired>
-                    <FormLabel color={'white'}>Username</FormLabel>
-                    <Input type="text" bg={'#1F1F1E'} color={'white'} />
+                    <FormLabel color="white">Username</FormLabel>
+                    <Input type="text" {...register("username")} color="white"/>
+                    {errors.username && <Text color="red.500">{errors.username.message}</Text>}
                   </FormControl>
                 </Box>
               </HStack>
               <FormControl id="email" isRequired>
-                <FormLabel color={'white'}>Email</FormLabel>
-                <Input type="email" bg={'#1F1F1E'} color={'white'} />
+                <FormLabel color="white">Email</FormLabel>
+                <Input type="email" {...register("email")} color="white"/>
+                {errors.email && <Text color="red.500">{errors.email.message}</Text>}
               </FormControl>
               <FormControl id="password" isRequired>
-                <FormLabel color={'white'}>Password</FormLabel>
+                <FormLabel color="white">Password</FormLabel>
                 <InputGroup>
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    bg={'#1F1F1E'}
-                    color={'white'}
-                  />
+                  <Input type={showPassword ? 'text' : 'password'} {...register("password")} color="white"/>
                   <InputRightElement h={'full'}>
                     <Button
                       variant={'ghost'}
-                      color={'white'}
-                      onClick={() => setShowPassword((showPassword) => !showPassword)}>
+                      onClick={() => setShowPassword(!showPassword)}>
                       {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
+                {errors.password && <Text color="red.500">{errors.password.message}</Text>}
               </FormControl>
               <Stack spacing={10} pt={2}>
                 <Button
@@ -80,19 +86,20 @@ import {
                   color={'white'}
                   _hover={{
                     bg: 'red.700',
-                  }}>
+                  }}
+                  type="submit">
                   Sign up
                 </Button>
               </Stack>
-              <Stack pt={6}>
-                <Text align={'center'} color={'white'}>
-                  Already a user? <Link color={'red.400'} onClick={() => navigate('/login')}>Login</Link>
-                </Text>
-              </Stack>
+            </form>
+            <Stack pt={6}>
+              <Text align={'center'} color={'white'}>
+                Already a user? <Link color={'red.400'} href="/login">Login</Link>
+              </Text>
             </Stack>
-          </Box>
-        </Stack>
-      </Flex>
-    )
-  }
-  
+          </Stack>
+        </Box>
+      </Stack>
+    </Flex>
+  );
+}
