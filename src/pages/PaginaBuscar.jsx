@@ -47,7 +47,7 @@ const PaginaBuscar = () => {
       };
 
       // Atualiza o estado de favorito no backend
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}:8000/api/favorite`, movie, config);
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/favorite`, movie, config);
 
       // Atualiza o estado local dos filmes
       setMovies(prevMovies =>
