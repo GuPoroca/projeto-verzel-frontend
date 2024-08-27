@@ -23,7 +23,7 @@ const PaginaBuscar = () => {
         }
       };
 
-      const response = await axios.post('http://localhost:8000/api/films', { searchQuery: query, userId }, config);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/films`, { searchQuery: query, userId }, config);
       setMovies(response.data.result.results);
 
       setTimeout(() => {
@@ -47,7 +47,7 @@ const PaginaBuscar = () => {
       };
 
       // Atualiza o estado de favorito no backend
-      await axios.post('http://localhost:8000/api/favorite', movie, config);
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}:8000/api/favorite`, movie, config);
 
       // Atualiza o estado local dos filmes
       setMovies(prevMovies =>

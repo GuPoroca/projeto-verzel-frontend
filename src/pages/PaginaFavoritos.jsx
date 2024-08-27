@@ -31,14 +31,14 @@ const PaginaFavoritos = () => {
         };
 
         // Obtém os filmes favoritos do usuário com base no hash da URL
-        const response = await axios.get(`http://localhost:8000/api/films/${hash}`, config);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/films/${hash}`, config);
         setMovies(response.data);
 
         // Obtém os filmes favoritos do usuário logado
-        const userResponse = await axios.get(`http://localhost:8000/api/films/${userHash}`, config);
+        const userResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/films/${userHash}`, config);
         setUserFavorites(userResponse.data);
 
-        const userResponseName = await axios.get(`http://localhost:8000/api/user/${hash}`, config);
+        const userResponseName = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/${hash}`, config);
         setUserName(userResponseName.data);
         setTimeout(() => {
           if (moviesRef.current) {
@@ -70,7 +70,7 @@ const PaginaFavoritos = () => {
       };
 
       // Atualiza o estado de favorito no backend
-      await axios.post('http://localhost:8000/api/favorite', movie, config);
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/favorite`, movie, config);
 
       // Atualiza o estado local dos filmes
       setMovies(prevMovies =>

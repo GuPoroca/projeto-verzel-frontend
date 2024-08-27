@@ -28,7 +28,7 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/auth", data);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth`, data);
       const token = response.data.token;
       console.log("Token:", token);
       // Chama o método login do contexto

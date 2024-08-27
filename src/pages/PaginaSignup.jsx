@@ -30,7 +30,7 @@ export default function Signup() {
 
   const onSubmit = async (data) => {
     try {
-      await axios.post("http://localhost:8000/api/user", data);
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user`, data);
       // Exibir mensagem de sucesso ou redirecionar
       navigate("/login");
     } catch (error) {
