@@ -20,7 +20,7 @@ const SearchBar = ({ onSearch }) => {
   }
 
   return (
-    <Center h="100vh" bg={useColorModeValue('#1F1F1E', 'gray.800')}>
+    <Center h="50vh" bg={useColorModeValue('#1F1F1E', 'gray.800')}>
       <Box
         w={{ base: '90%', sm: '80%', md: '50%', lg: '40%' }}
         p={6}

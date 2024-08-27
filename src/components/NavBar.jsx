@@ -43,7 +43,16 @@ const NavBar = () => {
             >
               Favoritos
             </Link>
-            <button onClick={logout}>Logout</button>
+            <Link
+              as={RouterLink}
+              to="/login"
+              p={2}
+              color="white"
+              _hover={{ textDecoration: 'none', bg: 'red.700' }}
+              onClick={logout}
+            >
+              Logout
+            </Link>
           </>
         ) : (
           <>
